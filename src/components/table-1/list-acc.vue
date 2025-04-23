@@ -29,7 +29,7 @@ const removeRow = (id: string) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(row) in rows" :key="row.id">
+      <tr v-for="row in rows" :key="row.id">
         <td>
           <InputMarks v-model="row.marks.text" />
         </td>

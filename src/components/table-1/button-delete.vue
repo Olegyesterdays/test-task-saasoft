@@ -7,9 +7,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <button @click="emit('remove')" style="border: 2px solid red; color: red">
-    Удалить
-  </button>
+  <button @click="emit('remove')" style="border: 2px solid red; color: red">Удалить</button>
 </template>
 
 <style scoped lang="scss"></style>
