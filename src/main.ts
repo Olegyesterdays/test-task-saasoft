@@ -1,5 +1,9 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+import { createPinia } from 'pinia';
+import vuetify from './plugins/vuetify';
+import '@/styles/style.scss';
 
-createApp(App).mount('#app')
+const app = createApp(App);
+
+app.use(createPinia()).use(vuetify).mount('#app');
