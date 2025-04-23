@@ -12,42 +12,71 @@ interface IMark {
 
 interface IAccount {
   id: string;
-  marks?: IMark[];
+  marks?: IMark;
   recordType?: TRecord;
   login?: string;
   password?: TPassword;
 }
 
 export const useFormStore = defineStore('formStore', () => {
-  const accountList = ref<IAccount[]>([]);
+  const accountList = ref<IAccount[]>([
+    {
+      id: '1',
+      marks: { text: 'marks 1' },
+      recordType: 'LDAP',
+      login: 'login 1',
+      password: 'password 1'
+    },
+    {
+      id: '2',
+      marks: { text: 'marks 2' },
+      recordType: 'LDAP',
+      login: 'login 2',
+      password: 'password 2'
+    },
+    {
+      id: '3',
+      marks: { text: 'marks 3' },
+      recordType: 'Локальная',
+      login: 'login 3',
+      password: 'password 3'
+    }
+  ]);
 
   const accountInListLocalStorage = localStorage.getItem('accountList');
-
   if (accountInListLocalStorage) {
-    accountList.value = JSON.parse(accountInListLocalStorage)._value;
+    try {
+      const parsedData = JSON.parse(accountInListLocalStorage);
+      accountList.value = parsedData;
+    } catch (error) {
+      console.error('Ошибка при чтении данных из localStorage:', error);
+    }
   }
 
   watch(
-    () => accountList,
+    () => accountList.value,
     state => {
-      localStorage.setItem('accountList', JSON.stringify(state));
+      try {
+        localStorage.setItem('accountList', JSON.stringify(state));
+      } catch (error) {
+        console.error('Ошибка при сохранении данных в localStorage:', error);
+      }
     },
     { deep: true }
   );
 
-  const getAccountList = computed(() => accountList.value)
+  const getAccountList = computed(() => accountList.value);
 
   const createAccount = (): void => {
     const newAccount: IAccount = {
       id: uuidv4(),
-      marks: [],
+      marks: { text: '' },
       recordType: 'LDAP',
       login: '',
       password: null
     };
-
     accountList.value.push(newAccount);
-  }
+  };
 
   const deleteAccount = (id: string): void => {
     accountList.value = accountList.value.filter(acc => acc.id !== id);
